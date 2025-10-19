@@ -1,0 +1,1 @@
+- npm i react-router-dom jspdf html2canvas pdf-lib
