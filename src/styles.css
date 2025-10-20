@@ -512,3 +512,33 @@ a:hover {
   border-radius: 10px;
   background: rgba(255, 214, 140, 0.08);
 }
+
+/* ! new  compliance tool */
+.status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border, #d8dbe6);
+}
+.status-badge.ok {
+  background: #e9f7ef;
+  color: #176a3a;
+  border-color: #bfe6cf;
+}
+.status-badge.due {
+  background: #fff6e5;
+  color: #7a5200;
+  border-color: #ffdead;
+}
+.status-badge.expired {
+  background: #ffecec;
+  color: #8a1f1f;
+  border-color: #ffc2c2;
+}
+.label.tiny {
+  font-size: 11px;
+  color: #54607a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

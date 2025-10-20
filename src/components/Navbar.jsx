@@ -70,6 +70,14 @@ export default function Navbar() {
           <NavLink className="btn ghost" to="/tour-form">
             Tour Form
           </NavLink>
+          <NavLink className="btn" to="/case-file-checklist">
+            Case File Checklist
+          </NavLink>
+
+          <NavLink className="btn" to="/staff-compliance">
+            Compliance Checker
+          </NavLink>
+
           <NavLink className="btn ghost" to="/flagged">
             Flagged ({flagged.size})
           </NavLink>

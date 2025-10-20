@@ -9,6 +9,8 @@ import FormBuilder from "./pages/FormBuilder.jsx";
 import PdfTools from "./pages/PdfTools.jsx";
 import AdminTools from "./pages/AdminTools.jsx";
 import TourForm from "./pages/TourForm.jsx";
+import StaffCompliance from "./pages/StaffCompliance.jsx";
+import CaseFileChecklist from "./pages/CaseFileChecklist.jsx";
 
 export default function App() {
   return (
@@ -22,6 +24,8 @@ export default function App() {
         <Route path="/pdf-tools" element={<PdfTools />} />
         <Route path="/admin-tools" element={<AdminTools />} />
         <Route path="/tour-form" element={<TourForm />} />
+        <Route path="/staff-compliance" element={<StaffCompliance />} />
+        <Route path="/case-file-checklist" element={<CaseFileChecklist />} />
       </Routes>
       <Footer />
     </>
