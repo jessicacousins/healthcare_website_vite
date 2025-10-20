@@ -13,6 +13,13 @@ export default function FormPreview({
   const consents = intake?.consents || {};
   const contacts = intake?.contacts || [{}, {}];
   const assessments = intake?.assessments || {};
+  const pcpHistory = intake?.pcpHistory || [];
+  const diagnoses = intake?.diagnoses || "";
+  const medications = intake?.medications || [];
+  const adl = intake?.adl || {};
+  const careNeeds = intake?.careNeeds || "";
+  const currentServices = intake?.currentServices || {};
+  const trauma = intake?.trauma || {};
 
   const Box = ({ checked }) => (
     <span
@@ -57,6 +64,13 @@ export default function FormPreview({
       </div>
     </div>
   );
+
+  const ServiceItem = ({ label, value }) =>
+    value ? (
+      <div>
+        <Box checked={true} /> {label}
+      </div>
+    ) : null;
 
   return (
     <div className="preview-surface" id="form-preview">
@@ -323,6 +337,311 @@ export default function FormPreview({
               />
             </div>
           </section>
+
+          {/* NEW — Past PCPs */}
+          {pcpHistory?.length ? (
+            <section>
+              <h3 style={{ margin: "10px 0 6px", color: "#0e1a2b" }}>
+                Past Primary Care Providers
+              </h3>
+              <div style={{ display: "grid", gap: 6 }}>
+                {pcpHistory.map((p, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      border: "1px solid #ddd",
+                      padding: 10,
+                      borderRadius: 8,
+                      background: "#fff",
+                    }}
+                  >
+                    {[p?.name, p?.practice, p?.phone]
+                      .filter(Boolean)
+                      .join(" — ") || "—"}
+                    {(p?.from || p?.to) && (
+                      <div style={{ color: "#555", fontSize: 12 }}>
+                        Dates: {p?.from || "?"} – {p?.to || "?"}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          {/* NEW — Diagnoses */}
+          {diagnoses && diagnoses.trim() ? (
+            <section>
+              <h3 style={{ margin: "10px 0 6px", color: "#0e1a2b" }}>
+                Diagnoses
+              </h3>
+              <div
+                style={{
+                  border: "1px solid #ddd",
+                  padding: 10,
+                  borderRadius: 8,
+                  background: "#fff",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                {diagnoses}
+              </div>
+            </section>
+          ) : null}
+
+          {/* NEW — Medications Table */}
+          {medications?.length ? (
+            <section>
+              <h3 style={{ margin: "10px 0 6px", color: "#0e1a2b" }}>
+                Medications
+              </h3>
+              <div style={{ overflowX: "auto" }}>
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    fontSize: 12,
+                    background: "#fff",
+                  }}
+                >
+                  <thead>
+                    <tr>
+                      {[
+                        "Name",
+                        "Dose",
+                        "Route",
+                        "Frequency",
+                        "Purpose",
+                        "Prescriber",
+                        "Start",
+                      ].map((h) => (
+                        <th
+                          key={h}
+                          style={{
+                            textAlign: "left",
+                            borderBottom: "1px solid #ccc",
+                            padding: "8px 6px",
+                            color: "#223",
+                          }}
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {medications.map((m, i) => (
+                      <tr key={i}>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            padding: "6px",
+                          }}
+                        >
+                          {m?.name || "—"}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            padding: "6px",
+                          }}
+                        >
+                          {m?.dose || "—"}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            padding: "6px",
+                          }}
+                        >
+                          {m?.route || "—"}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            padding: "6px",
+                          }}
+                        >
+                          {m?.frequency || "—"}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            padding: "6px",
+                          }}
+                        >
+                          {m?.purpose || "—"}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            padding: "6px",
+                          }}
+                        >
+                          {m?.prescriber || "—"}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            padding: "6px",
+                          }}
+                        >
+                          {m?.start || "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ) : null}
+
+          {/* NEW — ADL Assistance */}
+          {Object.keys(adl).length ? (
+            <section>
+              <h3 style={{ margin: "10px 0 6px", color: "#0e1a2b" }}>
+                ADL Assistance
+              </h3>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, minmax(0,1fr))",
+                  gap: 8,
+                }}
+              >
+                {Object.entries(adl).map(([k, v]) => (
+                  <FieldRow
+                    key={k}
+                    label={k.replace(/^\w/, (c) => c.toUpperCase())}
+                    value={v}
+                  />
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          {/* NEW — Type of Care Needed */}
+          {careNeeds && careNeeds.trim() ? (
+            <section>
+              <h3 style={{ margin: "10px 0 6px", color: "#0e1a2b" }}>
+                Type of Care Needed
+              </h3>
+              <div
+                style={{
+                  border: "1px solid #ddd",
+                  padding: 10,
+                  borderRadius: 8,
+                  background: "#fff",
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                {careNeeds}
+              </div>
+            </section>
+          ) : null}
+
+          {/* NEW — Current Services */}
+          {Object.values(currentServices).some(Boolean) ? (
+            <section>
+              <h3 style={{ margin: "10px 0 6px", color: "#0e1a2b" }}>
+                Current Services
+              </h3>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, minmax(0,1fr))",
+                  gap: 6,
+                }}
+              >
+                <ServiceItem
+                  label="Home Health"
+                  value={currentServices.homeHealth}
+                />
+                <ServiceItem
+                  label="Physical Therapy"
+                  value={currentServices.physicalTherapy}
+                />
+                <ServiceItem
+                  label="Occupational Therapy"
+                  value={currentServices.occupationalTherapy}
+                />
+                <ServiceItem
+                  label="Speech Therapy"
+                  value={currentServices.speechTherapy}
+                />
+                <ServiceItem
+                  label="Behavioral Therapy"
+                  value={currentServices.behavioralTherapy}
+                />
+                <ServiceItem
+                  label="Skilled Nursing"
+                  value={currentServices.skilledNursing}
+                />
+                <ServiceItem
+                  label="Case Management"
+                  value={currentServices.caseManagement}
+                />
+                <ServiceItem
+                  label="Transportation"
+                  value={currentServices.transportation}
+                />
+                <ServiceItem
+                  label="Day Program"
+                  value={currentServices.dayProgram}
+                />
+                {currentServices.other && (
+                  <div>
+                    <Box checked={true} /> Other —{" "}
+                    {currentServices.otherDetail || "—"}
+                  </div>
+                )}
+              </div>
+              {currentServices.serviceNotes && (
+                <div style={{ marginTop: 8 }}>
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "#334",
+                      textTransform: "uppercase",
+                      letterSpacing: ".05em",
+                      marginBottom: 4,
+                    }}
+                  >
+                    Notes
+                  </div>
+                  <div
+                    style={{
+                      border: "1px solid #ddd",
+                      padding: 10,
+                      borderRadius: 8,
+                      background: "#fff",
+                      whiteSpace: "pre-wrap",
+                    }}
+                  >
+                    {currentServices.serviceNotes}
+                  </div>
+                </div>
+              )}
+            </section>
+          ) : null}
+
+          {/* NEW — Trauma-Informed Care */}
+          {trauma.triggers || trauma.calmingStrategies || trauma.notes ? (
+            <section>
+              <h3 style={{ margin: "10px 0 6px", color: "#0e1a2b" }}>
+                Trauma-Informed Care
+              </h3>
+              <FieldRow label="Known Triggers" value={trauma.triggers} />
+              <FieldRow
+                label="Calming Strategies"
+                value={trauma.calmingStrategies}
+              />
+              <FieldRow
+                label="Notes (for staff awareness)"
+                value={trauma.notes}
+              />
+            </section>
+          ) : null}
         </div>
       )}
 
