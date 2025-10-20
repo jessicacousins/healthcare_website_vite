@@ -41,7 +41,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/*  Disclaimer */}
+        {/* Disclaimer */}
         <section className="card disclaimer">
           <div className="kicker">Disclaimer</div>
           <h2 className="disclaimer-title">Not a Records System</h2>
@@ -66,6 +66,7 @@ export default function Home() {
         </section>
       </div>
 
+      {/* Core feature tiles */}
       <div style={{ marginTop: 18 }} className="grid grid-3">
         <div className="card">
           <div className="kicker">Create</div>
@@ -73,14 +74,26 @@ export default function Home() {
           <p className="inline-help">
             Compose intake, consent, incident, or audit forms and export to PDF.
           </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn" to="/form-builder">
+              Open Form Builder
+            </Link>
+          </div>
         </div>
+
         <div className="card">
           <div className="kicker">Convert</div>
           <div className="h1">Merge & Make PDFs</div>
           <p className="inline-help">
             Combine PDFs, turn images or text into PDFs—all client-side.
           </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn" to="/pdf-tools">
+              Open PDF Tools
+            </Link>
+          </div>
         </div>
+
         <div className="card">
           <div className="kicker">Manage</div>
           <div className="h1">Admin Utilities</div>
@@ -88,6 +101,69 @@ export default function Home() {
             Generate checklists and memos; download and file in your official
             systems.
           </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn" to="/admin-tools">
+              Open Admin Tools
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* New purpose-built tools */}
+      <div style={{ marginTop: 18 }} className="grid grid-3">
+        <div className="card">
+          <div className="kicker">Starter Blueprint</div>
+          <div className="h1">Tour Form</div>
+          <p className="inline-help">
+            Capture pre-intake details during a program tour: client/guardian,
+            contact info, priority, diagnoses, meds, ADLs, current services, and
+            trauma-informed care—then export to PDF.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              gap: 10,
+              flexWrap: "wrap",
+              marginTop: 10,
+            }}
+          >
+            <Link className="btn ok" to="/tour-form">
+              Open Tour Form
+            </Link>
+            <Link className="btn ghost" to="/templates">
+              More Blueprints
+            </Link>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="kicker">HR & Compliance</div>
+          <div className="h1">Staff Credential Checker</div>
+          <p className="inline-help">
+            Track CPR/MAP/CORI, OSHA/HIPAA, license expirations, and
+            role-specific items. See due/expired at a glance and download a
+            summary PDF.
+          </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn ok" to="/staff-compliance">
+              Open Compliance Checker
+            </Link>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="kicker">Readiness</div>
+          <div className="h1">Case File Checklist</div>
+          <p className="inline-help">
+            MassHealth/department-run baseline checklist (identity, clinical,
+            consents, plans, meds, safety, services) with a progress bar and PDF
+            export. Paper or digital sources both supported.
+          </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn ok" to="/case-file-checklist">
+              Open Case File Checklist
+            </Link>
+          </div>
         </div>
       </div>
     </div>

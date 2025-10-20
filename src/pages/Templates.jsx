@@ -8,7 +8,7 @@ const TEMPLATES = [
     id: "tmpl-intake",
     title: "Client Intake (General)",
     blurb:
-      "Basic demographics, contacts, consents. For non-PHI trial/demo use here.",
+      "Demographics, contacts, insurance/IDs, and core consents. Open in Form Builder and tailor for your program.",
     to: "/form-builder",
   },
   {
@@ -20,7 +20,7 @@ const TEMPLATES = [
   {
     id: "tmpl-incident",
     title: "Incident/Unusual Event Report",
-    blurb: "Structured incident capture with factors and follow-up fields.",
+    blurb: "Structured incident capture with contributing factors & follow-up.",
     to: "/form-builder",
   },
   {
@@ -40,13 +40,29 @@ const TEMPLATES = [
     id: "tmpl-tour",
     title: "Tour Form",
     blurb:
-      "Client & guardian info, location, contact, birthday, notes, toured by, and priority (High/Med/Low).",
+      "Client & guardian info, location, contact, birthday, notes, toured by, priority — plus PCP history, diagnoses, detailed medications, ADLs, current services, and trauma-informed care.",
     to: "/tour-form",
+  },
+
+  {
+    id: "tmpl-staff-compliance",
+    title: "Staff Credential & Compliance Checker",
+    blurb:
+      "HR/Managers: track CPR/MAP/CORI, OSHA/HIPAA, licenses, and expirations with an at-a-glance status and PDF export.",
+    to: "/staff-compliance",
+  },
+  {
+    id: "tmpl-case-file",
+    title: "Case File Readiness Checklist",
+    blurb:
+      "MassHealth/department-run baseline readiness (identity, clinical, consents, plans, meds, safety, services) with a progress bar and PDF export.",
+    to: "/case-file-checklist",
   },
 ];
 
 export default function Templates() {
   const { searchQuery } = useSession();
+
   const list = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) return TEMPLATES;
