@@ -18,7 +18,8 @@ export default function Navbar() {
     <div className="navbar">
       <div className="nav-inner">
         <Link to="/" className="brand" aria-label="Healthcare Tools Hub Home">
-          <div className="brand-badge" />
+          <div className="brand-badge" aria-hidden="true" />
+
           <span>Healthcare Tools Hub</span>
         </Link>
 
@@ -66,12 +67,13 @@ export default function Navbar() {
           <NavLink className="btn ghost" to="/admin-tools">
             Admin
           </NavLink>
-          <NavLink className="btn ghost" to="/flagged">
-            Flagged ({flagged.size})
-          </NavLink>
           <NavLink className="btn ghost" to="/tour-form">
             Tour Form
           </NavLink>
+          <NavLink className="btn ghost" to="/flagged">
+            Flagged ({flagged.size})
+          </NavLink>
+
           <SessionBadge />
         </div>
       </div>

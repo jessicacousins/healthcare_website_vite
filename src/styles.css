@@ -138,13 +138,124 @@ a:hover {
   font-weight: 700;
   letter-spacing: 0.02em;
 }
+/* ===== Refined Orb (subtle, transparent, star-like) ===== */
 .brand-badge {
-  width: 34px;
-  height: 34px;
+  position: relative;
+  width: 32px; /* scaled down from 36 */
+  height: 32px;
   border-radius: 50%;
-  background: radial-gradient(120% 120% at 30% 20%, #5ea2ff, #0ef, #6f6cff);
-  box-shadow: 0 0 20px rgba(94, 162, 255, 0.5),
-    inset 0 0 18px rgba(255, 255, 255, 0.25);
+  /* softer core + tiny specular highlight */
+  background: radial-gradient(
+        34% 34% at 36% 28%,
+        rgba(255, 255, 255, 0.45) 0 6%,
+        rgba(255, 255, 255, 0) 9%
+      )
+      no-repeat,
+    radial-gradient(
+      62% 62% at 35% 30%,
+      #8dc7ff 0 18%,
+      #5ea2ff 42%,
+      #3b79f2 62%,
+      #132457 100%
+    );
+  box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.16),
+    0 0 12px rgba(94, 162, 255, 0.2), 0 6px 18px rgba(0, 0, 0, 0.28);
+  overflow: visible;
+  isolation: isolate;
+  will-change: transform, filter, opacity;
+  animation: orb-float 7s ease-in-out infinite;
+  opacity: 0.96; /* slightly more transparent overall */
+}
+
+/* shimmering star ring — softer + more transparent */
+.brand-badge::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background:
+    /* star “rays” — ultra thin & faint */ conic-gradient(
+    from 0deg,
+    rgba(122, 242, 224, 0) 0 89deg,
+    rgba(122, 242, 224, 0.14) 89deg 91deg,
+    rgba(122, 242, 224, 0) 91deg 179deg,
+    rgba(106, 200, 255, 0.12) 179deg 181deg,
+    rgba(106, 200, 255, 0) 181deg 269deg,
+    rgba(162, 155, 255, 0.12) 269deg 271deg,
+    rgba(162, 155, 255, 0) 271deg 360deg
+  );
+  filter: blur(6px);
+  opacity: 0.28; /* dialed way down */
+  animation: orb-spin 16s linear infinite, orb-twinkle 5.8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* moving surface glint — reduced white, more glassy */
+.brand-badge::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: radial-gradient(
+        38% 38% at 28% 25%,
+        rgba(255, 255, 255, 0.55),
+        rgba(255, 255, 255, 0) 58%
+      )
+      no-repeat,
+    conic-gradient(
+      from 0deg,
+      rgba(255, 255, 255, 0) 0 82%,
+      rgba(255, 255, 255, 0.18) 86% 92%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.38; /* less “pulled out” white */
+  animation: orb-spin 10s linear infinite;
+  pointer-events: none;
+}
+
+/* subtle lift on hover, not dramatic */
+.brand {
+  perspective: 600px;
+}
+.brand:hover .brand-badge {
+  transform: translateY(-1px) rotateX(5deg) rotateY(-4deg);
+  filter: saturate(1.06);
+}
+
+/* reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .brand-badge,
+  .brand-badge::before,
+  .brand-badge::after {
+    animation: none;
+  }
+}
+
+/* Keyframes — calmer movement */
+@keyframes orb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes orb-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.5px);
+  }
+}
+@keyframes orb-twinkle {
+  0%,
+  100% {
+    opacity: 0.24;
+  }
+  50% {
+    opacity: 0.34;
+  }
 }
 
 .nav-actions {
@@ -231,6 +342,11 @@ a:hover {
   color: #0e1a2b;
 }
 
+.preview-surface h3 {
+  margin: 14px 0 8px;
+  color: #0e1a2b;
+}
+
 .file-pill {
   display: inline-flex;
   gap: 10px;
@@ -239,4 +355,160 @@ a:hover {
   border-radius: 999px;
   border: 1px dashed var(--border);
   color: var(--muted);
+}
+
+/* ! new  */
+/* ===== Home Hero & Disclaimer upgrades ===== */
+:root {
+  --hero-1: #6ac8ff;
+  --hero-2: #7af2e0;
+  --hero-3: #a29bff;
+  --disc-1: #ffd27a;
+  --disc-2: #ff9b77;
+  --disc-text: #261b12;
+}
+
+/* Welcome / Hero */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(
+      900px 400px at -10% -20%,
+      rgba(94, 162, 255, 0.2),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #121a36, #171f40 65%, #121833);
+  border: 1px solid rgba(120, 160, 255, 0.18);
+  box-shadow: 0 20px 60px rgba(36, 54, 120, 0.35);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(
+      600px 200px at 110% 10%,
+      rgba(110, 240, 232, 0.18),
+      transparent 60%
+    ),
+    radial-gradient(
+      500px 200px at 80% 120%,
+      rgba(162, 155, 255, 0.14),
+      transparent 60%
+    );
+  pointer-events: none;
+}
+
+.hero-title {
+  font-size: 34px;
+  line-height: 1.2;
+  margin: 4px 0 10px;
+  background: linear-gradient(
+    90deg,
+    var(--hero-1),
+    var(--hero-2),
+    var(--hero-3)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-lede {
+  color: #cfe6ff;
+}
+
+.badge-line {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  color: #0f142a;
+  background: linear-gradient(180deg, #e7f3ff, #cfe6ff);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.divider.gradient {
+  height: 1px;
+  margin: 16px 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(110, 240, 232, 0.6),
+    rgba(98, 154, 255, 0.7),
+    transparent
+  );
+}
+
+.hero-actions .btn {
+  box-shadow: 0 6px 18px rgba(80, 140, 255, 0.2);
+}
+
+/* Disclaimer Callout */
+.disclaimer {
+  background: radial-gradient(
+      700px 260px at 10% -20%,
+      rgba(255, 210, 122, 0.25),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #2a2220, #1e1a17 65%, #1a1716);
+  border: 1px solid rgba(255, 214, 140, 0.2);
+  color: #f7efe6;
+}
+
+.disclaimer-title {
+  font-size: 22px;
+  margin: 6px 0 10px;
+  color: #ffe6bd;
+}
+
+.disclaimer-text {
+  color: #f4dcc2;
+}
+
+.list-check {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.list-check li {
+  position: relative;
+  padding-left: 26px;
+  color: #f1e6d9;
+}
+.list-check li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 12px;
+  background: linear-gradient(180deg, var(--disc-1), var(--disc-2));
+  color: var(--disc-text);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.notice {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #ffe6bd;
+  padding: 8px 10px;
+  border: 1px dashed rgba(255, 214, 140, 0.35);
+  border-radius: 10px;
+  background: rgba(255, 214, 140, 0.08);
 }

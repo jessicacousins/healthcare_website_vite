@@ -5,18 +5,27 @@ export default function Home() {
   return (
     <div className="layout">
       <div className="grid grid-2">
-        <section className="card">
+        {/* Welcome / Hero */}
+        <section className="card hero">
           <div className="kicker">Welcome</div>
-          <div className="h1">Healthcare Tools Hub</div>
-          <p style={{ color: "var(--muted)" }}>
+          <h1 className="hero-title">Healthcare Tools Hub</h1>
+
+          <p className="hero-lede">
             A focused, education-grade toolkit for healthcare operations.
-            Everything happens <strong>in your browser</strong>: no servers, no
+            Everything runs <strong>in your browser</strong>—no servers, no
             databases, no cookies, and no localStorage. Generate forms, convert
-            PDFs, and produce admin documents with confidence—ephemeral by
-            design.
+            PDFs, and produce admin documents with confidence.
           </p>
-          <div className="divider"></div>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+
+          <div className="badge-line">
+            <span className="pill">Ephemeral • No Storage</span>
+            <span className="pill">Client-Side Only</span>
+            <span className="pill">Print & PDF Ready</span>
+          </div>
+
+          <div className="divider gradient"></div>
+
+          <div className="hero-actions">
             <Link className="btn primary" to="/form-builder">
               Open Form Builder
             </Link>
@@ -32,20 +41,28 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="card">
+        {/*  Disclaimer */}
+        <section className="card disclaimer">
           <div className="kicker">Disclaimer</div>
-          <div className="h1">Not a Records System</div>
-          <p style={{ color: "var(--muted)" }}>
+          <h2 className="disclaimer-title">Not a Records System</h2>
+
+          <p className="disclaimer-text">
             This site does <strong>not</strong> store, transmit, or retain
             Protected Health Information (PHI). It is a transient utility only.
-            Download your outputs securely to your organization’s approved
+            Download your outputs and file them in your organization’s approved
             systems.
           </p>
-          <ul style={{ lineHeight: 1.8 }}>
-            <li>Ephemeral: state resets on refresh.</li>
-            <li>No backend and no local persistence.</li>
-            <li>All conversions run locally in your browser.</li>
+
+          <ul className="list-check">
+            <li>Ephemeral: state resets on refresh</li>
+            <li>No backend and no local persistence</li>
+            <li>All conversions run locally in your browser</li>
           </ul>
+
+          <div className="notice">
+            Use your official EHR/EMR for PHI retention and signatures per
+            policy.
+          </div>
         </section>
       </div>
 
