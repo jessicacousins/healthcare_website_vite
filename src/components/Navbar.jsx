@@ -1,90 +1,170 @@
-import React from "react";
-import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { useSession } from "../context/SessionContext.jsx";
-import SessionBadge from "./SessionBadge.jsx";
 
 export default function Navbar() {
-  const { searchQuery, setSearchQuery, flagged } = useSession();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { searchQuery, setSearchQuery } = useSession();
+  const [open, setOpen] = useState(false);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    if (location.pathname !== "/templates") navigate("/templates");
-  };
+  const close = () => setOpen(false);
 
   return (
-    <div className="navbar">
+    <nav className="navbar" role="navigation" aria-label="Main">
       <div className="nav-inner">
-        <Link to="/" className="brand" aria-label="Healthcare Tools Hub Home">
-          <div className="brand-badge" aria-hidden="true" />
-
-          <span>Healthcare Tools Hub</span>
+        {/* Brand */}
+        <Link to="/" className="brand" onClick={close} aria-label="Home">
+          <span className="brand-badge" aria-hidden="true" />
+          <span>Healthcare Tools</span>
         </Link>
 
-        <form
-          className="search"
-          onSubmit={onSubmit}
-          role="search"
-          aria-label="Search templates and tools"
-        >
-          <svg width="16" height="16" aria-hidden="true">
-            <circle
-              cx="7"
-              cy="7"
-              r="6"
-              stroke="white"
-              fill="none"
-              strokeOpacity=".4"
-            />
-            <line
-              x1="11.5"
-              y1="11.5"
-              x2="15.5"
-              y2="15.5"
-              stroke="white"
-              strokeOpacity=".4"
-            />
-          </svg>
-          <input
-            placeholder="Search templates, tools, pages..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </form>
-
-        <div className="nav-actions">
-          <NavLink className="btn ghost" to="/templates">
+        {/* Desktop links */}
+        <div className="nav-links desktop-only">
+          <NavLink className="nav-link" to="/templates">
             Templates
           </NavLink>
-          <NavLink className="btn ghost" to="/form-builder">
+          <NavLink className="nav-link" to="/form-builder">
             Form Builder
           </NavLink>
-          <NavLink className="btn ghost" to="/pdf-tools">
+          <NavLink className="nav-link" to="/pdf-tools">
             PDF Tools
           </NavLink>
-          <NavLink className="btn ghost" to="/admin-tools">
+          <NavLink className="nav-link" to="/admin-tools">
             Admin
           </NavLink>
-          <NavLink className="btn ghost" to="/tour-form">
+          <NavLink className="nav-link" to="/tour-form">
             Tour Form
           </NavLink>
-          <NavLink className="btn" to="/case-file-checklist">
-            Case File Checklist
+          <NavLink className="nav-link" to="/staff-compliance">
+            Compliance
           </NavLink>
-
-          <NavLink className="btn" to="/staff-compliance">
-            Compliance Checker
+          <NavLink className="nav-link" to="/case-file-checklist">
+            Case Files
           </NavLink>
+        </div>
 
-          <NavLink className="btn ghost" to="/flagged">
-            Flagged ({flagged.size})
-          </NavLink>
+        {/* Desktop search */}
+        <div className="nav-actions desktop-only">
+          <div className="search" role="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M21 20.3l-4.2-4.2a7 7 0 10-1.4 1.4L20.3 21 21 20.3zM5 11a6 6 0 1112 0A6 6 0 015 11z"
+              />
+            </svg>
+            <input
+              aria-label="Search templates"
+              placeholder="Search…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
 
-          <SessionBadge />
+        {/* Mobile toggle */}
+        <button
+          className="nav-toggle mobile-only"
+          aria-label="Open menu"
+          aria-controls="nav-drawer"
+          aria-expanded={open ? "true" : "false"}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span className="bar" />
+          <span className="bar" />
+          <span className="bar" />
+        </button>
+      </div>
+
+      {/* Drawer */}
+      <div
+        id="nav-drawer"
+        className={`nav-drawer ${open ? "show" : ""}`}
+        onClick={close}
+      >
+        <div
+          className="nav-drawer-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="drawer-head">
+            <div className="brand small">
+              <span className="brand-badge" aria-hidden="true" />
+              <span>Healthcare Tools</span>
+            </div>
+            <button
+              className="nav-close"
+              aria-label="Close menu"
+              onClick={close}
+            >
+              ×
+            </button>
+          </div>
+
+          <div className="drawer-search">
+            <div className="search" role="search">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M21 20.3l-4.2-4.2a7 7 0 10-1.4 1.4L20.3 21 21 20.3zM5 11a6 6 0 1112 0A6 6 0 015 11z"
+                />
+              </svg>
+              <input
+                aria-label="Search templates"
+                placeholder="Search…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="drawer-links">
+            <NavLink className="nav-link" to="/" onClick={close}>
+              Home
+            </NavLink>
+            <NavLink className="nav-link" to="/templates" onClick={close}>
+              Templates
+            </NavLink>
+            <NavLink className="nav-link" to="/form-builder" onClick={close}>
+              Form Builder
+            </NavLink>
+            <NavLink className="nav-link" to="/pdf-tools" onClick={close}>
+              PDF Tools
+            </NavLink>
+            <NavLink className="nav-link" to="/admin-tools" onClick={close}>
+              Admin
+            </NavLink>
+            <NavLink className="nav-link" to="/tour-form" onClick={close}>
+              Tour Form
+            </NavLink>
+            <NavLink
+              className="nav-link"
+              to="/staff-compliance"
+              onClick={close}
+            >
+              Compliance
+            </NavLink>
+            <NavLink
+              className="nav-link"
+              to="/case-file-checklist"
+              onClick={close}
+            >
+              Case Files
+            </NavLink>
+          </div>
+
+          <div className="drawer-footer">
+            <div className="inline-help">
+              Ephemeral • No storage • Client-side only
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 }
