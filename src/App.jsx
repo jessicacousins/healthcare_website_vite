@@ -11,6 +11,7 @@ import AdminTools from "./pages/AdminTools.jsx";
 import TourForm from "./pages/TourForm.jsx";
 import StaffCompliance from "./pages/StaffCompliance.jsx";
 import CaseFileChecklist from "./pages/CaseFileChecklist.jsx";
+import HomeSafetyAssessment from "./pages/HomeSafetyAssessment.jsx";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/admin-tools" element={<AdminTools />} />
         <Route path="/tour-form" element={<TourForm />} />
         <Route path="/staff-compliance" element={<StaffCompliance />} />
+        <Route path="/home-safety" element={<HomeSafetyAssessment />} />
         <Route path="/case-file-checklist" element={<CaseFileChecklist />} />
       </Routes>
       <Footer />

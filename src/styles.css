@@ -544,7 +544,6 @@ a:hover {
 }
 
 /* ! new navbar scale  */
-/* ===== Responsive scaffolding (additive) ===== */
 :root {
   --container-max: 1200px;
 }
@@ -565,7 +564,6 @@ a:hover {
   font-size: clamp(24px, 4.5vw, 38px);
 }
 
-/* Utilities */
 .desktop-only {
   display: block;
 }
@@ -582,7 +580,6 @@ a:hover {
   }
 }
 
-/* Make grid cards breathe on phones */
 @media (max-width: 600px) {
   .grid {
     gap: 14px;
@@ -592,7 +589,6 @@ a:hover {
   }
 }
 
-/* ===== Modern, scalable navbar ===== */
 .navbar {
   position: sticky;
   top: 0;
@@ -630,7 +626,6 @@ a:hover {
   text-decoration: none;
 }
 
-/* Search shrinks on small screens */
 .search {
   min-width: 260px;
 }
@@ -641,7 +636,6 @@ a:hover {
   }
 }
 
-/* Hamburger button */
 .nav-toggle {
   width: 40px;
   height: 36px;
@@ -660,7 +654,6 @@ a:hover {
   border-radius: 2px;
 }
 
-/* Drawer overlay */
 .nav-drawer {
   position: fixed;
   inset: 0;
@@ -674,7 +667,6 @@ a:hover {
   pointer-events: auto;
 }
 
-/* Drawer panel */
 .nav-drawer-panel {
   position: absolute;
   right: 0;
@@ -733,7 +725,6 @@ a:hover {
   border-top: 1px solid var(--border);
 }
 
-/* Tighten hero & disclaimer on small screens */
 @media (max-width: 600px) {
   .hero-lede {
     font-size: 14px;
@@ -747,10 +738,46 @@ a:hover {
   }
 }
 
-/* Preview surfaces remain readable on phones */
 .preview-surface {
   padding: clamp(14px, 3.5vw, 24px);
   border-radius: 10px;
   width: 800px;
   max-width: 100%;
+}
+
+/* ! new styles Environmental and Home Safety Assessment  */
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #0f152b;
+}
+.risk-badge.low {
+  color: #2bd4a3;
+  border-color: rgba(43, 212, 163, 0.35);
+}
+.risk-badge.moderate {
+  color: #ffb454;
+  border-color: rgba(255, 180, 84, 0.35);
+}
+.risk-badge.high {
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.35);
+}
+.progress-wrap {
+  margin-top: 10px;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.08);
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #7af2e0, #6ac8ff, #a29bff);
+  width: 0%;
+  transition: width 0.25s ease;
 }

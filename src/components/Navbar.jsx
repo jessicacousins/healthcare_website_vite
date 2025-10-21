@@ -40,6 +40,9 @@ export default function Navbar() {
           <NavLink className="nav-link" to="/case-file-checklist">
             Case Files
           </NavLink>
+          <NavLink className="nav-link" to="/home-safety">
+            Home Safety
+          </NavLink>
         </div>
 
         {/* Desktop search */}
