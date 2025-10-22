@@ -165,6 +165,22 @@ export default function Home() {
             </Link>
           </div>
         </div>
+
+        {/* Home & Environmental Safety Assessment */}
+        <div className="card">
+          <div className="kicker">Home Safety</div>
+          <div className="h1">Home & Environmental Safety</div>
+          <p className="inline-help">
+            Assess home readiness across environment, bathroom, kitchen, egress,
+            mobility/DME, and risk factors. Mark N/A, track readiness %, and
+            export to PDF.
+          </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn ok" to="/home-safety">
+              Open Home Safety Assessment
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
