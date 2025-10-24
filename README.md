@@ -2,6 +2,12 @@
 
 Client-side utilities for healthcare operations. No backend. No cookies. No localStorage. All state is in memory.
 
+Live at:
+
+```
+https://healthcaretools.netlify.app/
+```
+
 ## Stack
 
 - **Vite** + **React** (JavaScript)
