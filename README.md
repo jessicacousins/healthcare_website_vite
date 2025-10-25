@@ -4,10 +4,6 @@ Client-side utilities for healthcare operations. No backend. No cookies. No loca
 
 Live at:
 
-```
-https://healthcaretools.netlify.app/
-```
-
 ## Stack
 
 - **Vite** + **React** (JavaScript)
