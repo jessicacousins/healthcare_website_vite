@@ -109,7 +109,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* New purpose-built tools */}
       <div style={{ marginTop: 18 }} className="grid grid-3">
         <div className="card">
           <div className="kicker">Starter Blueprint</div>
@@ -178,6 +177,21 @@ export default function Home() {
           <div style={{ marginTop: 10 }}>
             <Link className="btn ok" to="/home-safety">
               Open Home Safety Assessment
+            </Link>
+          </div>
+        </div>
+
+        {/*  Billing */}
+        <div className="card">
+          <div className="kicker">Billing</div>
+          <div className="h1">DDS & MassHealth Billing</div>
+          <p className="inline-help">
+            Add contract lines (payer, service, rate, <strong>15 units</strong>{" "}
+            default), auto-calc line and grand totals, and export to PDF.
+          </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn ok" to="/billing">
+              Open Billing Contracts
             </Link>
           </div>
         </div>
