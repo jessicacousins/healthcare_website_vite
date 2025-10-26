@@ -43,6 +43,9 @@ export default function Navbar() {
           <NavLink className="nav-link" to="/home-safety">
             Home Safety
           </NavLink>
+          <NavLink className="nav-link" to="/billing">
+            Billing
+          </NavLink>
         </div>
 
         {/* Desktop search */}

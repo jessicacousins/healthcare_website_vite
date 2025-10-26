@@ -781,3 +781,11 @@ a:hover {
   width: 0%;
   transition: width 0.25s ease;
 }
+
+.table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.money {
+  font-weight: 700;
+}
