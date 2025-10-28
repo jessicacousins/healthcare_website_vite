@@ -60,6 +60,7 @@ src/
     StaffCompliance.jsx
     CaseFileChecklist.jsx
     HomeSafetyAssessment.jsx
+    BillingContracts.jsx
     AdminTools.jsx
     PdfTools.jsx
   util/
