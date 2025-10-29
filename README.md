@@ -21,6 +21,19 @@ https://healthcaretools.netlify.app/
 - **Client-only**: all processing happens in the browser.
 - **No PHI storage**: outputs must be downloaded and stored in approved systems.
 
+### Billing Contracts (DDS & MassHealth)
+
+Client-only billing sheet with regulated DDS CBDS presets (per 15-minute unit) and paste-in MassHealth Day Hab rates. Supports multi-client lines, PDF export, and basic header branding.
+
+Key features:
+
+- Starts with 10 blank rows; buttons to Add 1 or Add 10 rows.
+- DDS CBDS presets (101 CMR 415.00) preloaded with per-15-min unit rates.
+- MassHealth Day Hab: paste your current rates (101 CMR 348.00) as JSON to update for the session.
+- Default Units = 15 for each new line (editable).
+- Columns: Client, Payer, Description, Code, Units, Unit Label, Rate, Line Total, Notes.
+- Logo / Statement header (optional) renders at the top of the PDF.
+
 ## Getting Started
 
 ```bash
