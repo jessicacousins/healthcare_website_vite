@@ -46,6 +46,9 @@ export default function Navbar() {
           <NavLink className="nav-link" to="/billing">
             Billing
           </NavLink>
+          <NavLink className="nav-link" to="/mar">
+            MAP
+          </NavLink>
         </div>
 
         {/* Desktop search */}

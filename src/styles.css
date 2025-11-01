@@ -789,3 +789,50 @@ a:hover {
 .money {
   font-weight: 700;
 }
+
+/* ! MAP styles  */
+.mar-sheet {
+  background: #fff;
+}
+
+.mar-grid {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 12px;
+}
+
+.mar-grid th,
+.mar-grid td {
+  border: 1px solid var(--border, #ddd);
+  padding: 6px 4px;
+  text-align: left;
+}
+
+.mar-grid thead th {
+  color: #223;
+  font-weight: 600;
+  background: linear-gradient(180deg, #fafbfd, #f3f5f7);
+}
+
+.mar-day-cell {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.mar-day-box {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #999;
+  border-radius: 2px;
+}
+
+@media print {
+  .mar-day-box {
+    border-color: #000;
+  }
+}

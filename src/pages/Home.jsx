@@ -134,7 +134,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-
         <div className="card">
           <div className="kicker">HR & Compliance</div>
           <div className="h1">Staff Credential Checker</div>
@@ -149,7 +148,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-
         <div className="card">
           <div className="kicker">Readiness</div>
           <div className="h1">Case File Checklist</div>
@@ -164,7 +162,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-
         {/* Home & Environmental Safety Assessment */}
         <div className="card">
           <div className="kicker">Home Safety</div>
@@ -180,7 +177,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-
         {/*  Billing */}
         <div className="card">
           <div className="kicker">Billing</div>
@@ -192,6 +188,20 @@ export default function Home() {
           <div style={{ marginTop: 10 }}>
             <Link className="btn ok" to="/billing">
               Open Billing Contracts
+            </Link>
+          </div>
+        </div>
+        /* Medication MAP */
+        <div className="card">
+          <div className="kicker">Medication</div>
+          <div className="h1">MAP Generator</div>
+          <p className="inline-help">
+            Build a monthly MAP (med+time x day grid), add logo/header, initials
+            key, PRN log — then export to PDF.
+          </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn ok" to="/mar">
+              Open MAP Generator
             </Link>
           </div>
         </div>

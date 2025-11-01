@@ -13,6 +13,7 @@ import StaffCompliance from "./pages/StaffCompliance.jsx";
 import CaseFileChecklist from "./pages/CaseFileChecklist.jsx";
 import HomeSafetyAssessment from "./pages/HomeSafetyAssessment.jsx";
 import BillingContracts from "./pages/BillingContracts.jsx";
+import MedicationMAR from "./pages/MedicationMAP.jsx";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/home-safety" element={<HomeSafetyAssessment />} />
         <Route path="/case-file-checklist" element={<CaseFileChecklist />} />
         <Route path="/billing" element={<BillingContracts />} />
+        <Route path="/mar" element={<MedicationMAR />} />
       </Routes>
       <Footer />
     </>
