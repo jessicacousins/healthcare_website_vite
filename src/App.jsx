@@ -14,6 +14,7 @@ import CaseFileChecklist from "./pages/CaseFileChecklist.jsx";
 import HomeSafetyAssessment from "./pages/HomeSafetyAssessment.jsx";
 import BillingContracts from "./pages/BillingContracts.jsx";
 import MedicationMAR from "./pages/MedicationMAP.jsx";
+import ABASchedule from "./pages/ABASchedule.jsx";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="/case-file-checklist" element={<CaseFileChecklist />} />
         <Route path="/billing" element={<BillingContracts />} />
         <Route path="/mar" element={<MedicationMAR />} />
+        <Route path="/aba-schedule" element={<ABASchedule />} />
       </Routes>
       <Footer />
     </>

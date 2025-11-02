@@ -205,6 +205,20 @@ export default function Home() {
             </Link>
           </div>
         </div>
+        {/*  ABA Schedule */}
+        <div className="card">
+          <div className="kicker">ABA</div>
+          <div className="h1">Schedule + Note</div>
+          <p className="inline-help">
+            Build a weekly ABA service schedule (with totals) and attach a
+            structured session note. Export to PDF.
+          </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn ok" to="/aba-schedule">
+              Open ABA Schedule
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

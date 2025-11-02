@@ -836,3 +836,22 @@ a:hover {
     border-color: #000;
   }
 }
+/* ! ABA schedule styles*/
+.aba-grid {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 13px;
+}
+.aba-grid th,
+.aba-grid td {
+  border: 1px solid var(--border, #e1e4e8);
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+.aba-grid thead th {
+  background: linear-gradient(180deg, #fafbfd, #f3f5f7);
+  color: #223;
+  font-weight: 600;
+}
