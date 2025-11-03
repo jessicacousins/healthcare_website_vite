@@ -2,13 +2,18 @@ import React, { useMemo, useState } from "react";
 import { downloadElementAsPDF } from "../util/pdf.js";
 
 const DOW = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+
 const SERVICE_OPTS = [
   "ABA (H2019)",
   "Assessment (H0031)",
   "Treatment Plan (H0032)",
   "Parent/Caregiver Training",
   "BCBA Supervision",
+  "Day Habilitation (Program)",
+  "Transport (non-billable)",
 ];
+
 const RATIO_OPTS = ["1:1", "2:1", "Group"];
 
 function blankRow() {
@@ -22,6 +27,7 @@ function blankRow() {
     end: "17:00",
     hours: 2,
     notes: "",
+    billable: true,
   };
 }
 
@@ -33,14 +39,44 @@ function parseHHMM(s) {
   if (Number.isNaN(h) || Number.isNaN(min)) return null;
   return h * 60 + min;
 }
-
 function diffHours(start, end) {
   const a = parseHHMM(start),
     b = parseHHMM(end);
   if (a == null || b == null) return 0;
   let d = b - a;
-  if (d < 0) d += 24 * 60; // tolerate wrap (rare)
+  if (d < 0) d += 24 * 60;
   return Math.round((d / 60) * 100) / 100;
+}
+
+// Convenience builders for the day program template
+function rowTransport(day, start, end, ampm) {
+  return {
+    day,
+    service: "Transport (non-billable)",
+    ratio: "Group",
+    location: "Vendor / Agency",
+    staff: "",
+    start,
+    end,
+    hours: diffHours(start, end),
+    notes:
+      ampm === "AM" ? "Inbound transport window" : "Outbound transport window",
+    billable: false,
+  };
+}
+function rowProgram(day, start, end) {
+  return {
+    day,
+    service: "Day Habilitation (Program)",
+    ratio: "Group",
+    location: "Program",
+    staff: "",
+    start,
+    end,
+    hours: diffHours(start, end),
+    notes: "Program day window",
+    billable: true,
+  };
 }
 
 export default function ABASchedule() {
@@ -82,15 +118,59 @@ export default function ABASchedule() {
   const [supervision, setSupervision] = useState(0);
   const [noteFree, setNoteFree] = useState("");
 
+  // Totals only count billable rows
   const totals = useMemo(() => {
     const perService = {};
     let all = 0;
     for (const r of rows) {
       const hrs = Number(r.hours) || 0;
-      all += hrs;
-      perService[r.service] = (perService[r.service] || 0) + hrs;
+      if (r.billable) {
+        all += hrs;
+        perService[r.service] = (perService[r.service] || 0) + hrs;
+      }
     }
     return { all: Math.round(all * 100) / 100, perService };
+  }, [rows]);
+
+  // Compliance (Mon–Fri): require AM transport 08–09, Program 09–15, PM transport 15–16
+  const compliance = useMemo(() => {
+    const ok = (d, s, e, billableVal) =>
+      rows.some(
+        (r) =>
+          r.day === d &&
+          r.start === s &&
+          r.end === e &&
+          (billableVal == null || r.billable === billableVal)
+      );
+
+    const daily = WEEKDAYS.map((d) => {
+      const am = ok(d, "08:00", "09:00", false);
+      const prog = ok(d, "09:00", "15:00", true);
+      const pm = ok(d, "15:00", "16:00", false);
+
+      let status = "missing";
+      let detail = "Program block not found (09:00–15:00).";
+      if (prog && am && pm) {
+        status = "ok";
+        detail = "All required blocks present.";
+      } else if (prog && (!am || !pm)) {
+        status = "warn";
+        detail = `Program present; transport ${!am ? "in" : ""}${
+          !am && !pm ? " & " : ""
+        }${!pm ? "out" : ""} missing.`;
+      }
+      return { day: d, am, prog, pm, status, detail };
+    });
+
+    const counts = daily.reduce(
+      (a, d) => {
+        a[d.status] += 1;
+        return a;
+      },
+      { ok: 0, warn: 0, missing: 0 }
+    );
+
+    return { daily, counts };
   }, [rows]);
 
   const onLogoFile = (file) => {
@@ -106,7 +186,8 @@ export default function ABASchedule() {
   const addRow = () => setRows((list) => [...list, blankRow()]);
   const addTen = () =>
     setRows((list) => [...list, ...Array.from({ length: 10 }, blankRow)]);
-  const removeRow = (i) => setRows((list) => list.filter((_, k) => k !== i));
+  const clearRows = () => setRows([]);
+
   const duplicateRow = (i) =>
     setRows((list) => {
       const next = [...list];
@@ -118,13 +199,23 @@ export default function ABASchedule() {
     setRows((list) => {
       const next = [...list];
       const merged = { ...next[i], ...patch };
-      // auto-calc hours if start/end present
       if ("start" in patch || "end" in patch) {
         merged.hours = diffHours(merged.start, merged.end);
       }
       next[i] = merged;
       return next;
     });
+  };
+
+  // One-click Massachusetts Day Program template (Mon–Fri 8–4 with transport)
+  const fillDayProgramTemplate = () => {
+    const newRows = [];
+    for (const d of WEEKDAYS) {
+      newRows.push(rowTransport(d, "08:00", "09:00", "AM"));
+      newRows.push(rowProgram(d, "09:00", "15:00"));
+      newRows.push(rowTransport(d, "15:00", "16:00", "PM"));
+    }
+    setRows(newRows);
   };
 
   const exportPdf = async () => {
@@ -140,10 +231,12 @@ export default function ABASchedule() {
   return (
     <div className="layout">
       <div className="kicker">Scheduling</div>
-      <div className="h1">ABA Schedule & Session Note</div>
+      <div className="h1">ABA & Day Program Schedule + Session Note</div>
       <p className="inline-help">
-        Client-side only. Build a weekly service schedule for ABA contract
-        services and attach a structured note. Download as PDF.
+        Client-side only. Build a weekly schedule and attach a structured note.
+        The “Day Program” template fills Mon–Fri with transport and program
+        windows commonly used in Massachusetts DDS/MassHealth day services.
+        Confirm specifics with your contract and payer policy.
       </p>
 
       <div className="grid grid-2">
@@ -241,8 +334,33 @@ export default function ABASchedule() {
 
           <div className="kicker">Weekly Schedule</div>
           <div className="inline-help">
-            Enter start/end as 24-hour time (e.g., 15:00). Hours are
-            auto-calculated.
+            Enter start/end as 24-hour time (e.g., 15:00). Hours auto-calc.
+            Billable rows are counted in totals.
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              flexWrap: "wrap",
+              margin: "8px 0",
+            }}
+          >
+            <button className="btn ok" onClick={fillDayProgramTemplate}>
+              Fill Day Program Template (Mon–Fri 8–4 w/ Transport)
+            </button>
+            <button className="btn" onClick={addRow}>
+              Add Row
+            </button>
+            <button className="btn" onClick={addTen}>
+              Add 10 Rows
+            </button>
+            <button className="btn warn" onClick={clearRows}>
+              Clear
+            </button>
+            <span className="pill">
+              Billable Weekly Total: {totals.all.toFixed(2)} hrs
+            </span>
           </div>
 
           <table className="aba-grid" style={{ marginTop: 8 }}>
@@ -251,6 +369,7 @@ export default function ABASchedule() {
                 <th>Day</th>
                 <th>Service</th>
                 <th>Ratio</th>
+                <th>Billable</th>
                 <th>Location</th>
                 <th>Staff</th>
                 <th>Start</th>
@@ -304,6 +423,15 @@ export default function ABASchedule() {
                       ))}
                     </select>
                   </td>
+                  <td style={{ textAlign: "center" }}>
+                    <input
+                      type="checkbox"
+                      checked={!!r.billable}
+                      onChange={(e) =>
+                        updateRow(i, { billable: e.target.checked })
+                      }
+                    />
+                  </td>
                   <td>
                     <input
                       className="input"
@@ -311,7 +439,7 @@ export default function ABASchedule() {
                       onChange={(e) =>
                         updateRow(i, { location: e.target.value })
                       }
-                      placeholder="Home / Clinic / Community"
+                      placeholder="Home / Clinic / Program / Community"
                     />
                   </td>
                   <td>
@@ -319,7 +447,7 @@ export default function ABASchedule() {
                       className="input"
                       value={r.staff}
                       onChange={(e) => updateRow(i, { staff: e.target.value })}
-                      placeholder="RBT / BCBA / Name"
+                      placeholder="Staff name / role"
                     />
                   </td>
                   <td>
@@ -354,7 +482,9 @@ export default function ABASchedule() {
                       </button>
                       <button
                         className="btn danger"
-                        onClick={() => removeRow(i)}
+                        onClick={() =>
+                          setRows((list) => list.filter((_, k) => k !== i))
+                        }
                       >
                         Remove
                       </button>
@@ -365,16 +495,29 @@ export default function ABASchedule() {
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan={10}>
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                    <button className="btn" onClick={addRow}>
-                      Add Row
-                    </button>
-                    <button className="btn" onClick={addTen}>
-                      Add 10 Rows
-                    </button>
-                    <span className="pill">
-                      Weekly Total: {totals.all.toFixed(2)} hrs
+                <td colSpan={11}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 10,
+                      flexWrap: "wrap",
+                      alignItems: "center",
+                    }}
+                  >
+                    <strong>Billable Total: {totals.all.toFixed(2)} hrs</strong>
+                    <span style={{ color: "#566" }}>|</span>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        gap: 10,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {Object.entries(totals.perService).map(([k, v]) => (
+                        <span key={k} className="pill">
+                          {k}: {v.toFixed(2)}h
+                        </span>
+                      ))}
                     </span>
                   </div>
                 </td>
@@ -382,91 +525,50 @@ export default function ABASchedule() {
             </tfoot>
           </table>
 
+          {/* Compliance readout */}
           <div className="card" style={{ marginTop: 12 }}>
-            <div className="kicker">Session Note (ABA)</div>
-            <div className="grid grid-2">
-              <div>
-                <div className="label">Targets / Programs</div>
-                <textarea
-                  className="input"
-                  rows={3}
-                  value={targets}
-                  onChange={(e) => setTargets(e.target.value)}
-                  placeholder="e.g., receptive ID, manding, echoics, imitation, toileting..."
-                />
-              </div>
-              <div>
-                <div className="label">Procedures</div>
-                <textarea
-                  className="input"
-                  rows={3}
-                  value={procedures}
-                  onChange={(e) => setProcedures(e.target.value)}
-                  placeholder="e.g., DTT with errorless teaching; NET in kitchen; generalization in community..."
-                />
-              </div>
-              <div>
-                <div className="label">Reinforcement</div>
-                <textarea
-                  className="input"
-                  rows={3}
-                  value={reinforcement}
-                  onChange={(e) => setReinforcement(e.target.value)}
-                  placeholder="token board, differential reinforcement, NCR, etc."
-                />
-              </div>
-              <div>
-                <div className="label">Behavior Observed</div>
-                <textarea
-                  className="input"
-                  rows={3}
-                  value={behaviorObs}
-                  onChange={(e) => setBehaviorObs(e.target.value)}
-                  placeholder="topographies, frequency/duration/latency trends, antecedents, consequences..."
-                />
-              </div>
-              <div style={{ gridColumn: "1 / -1" }}>
-                <div className="label">Data Summary</div>
-                <textarea
-                  className="input"
-                  rows={3}
-                  value={dataSummary}
-                  onChange={(e) => setDataSummary(e.target.value)}
-                  placeholder="% correct, trials to criterion, prompts used, generalization status..."
-                />
-              </div>
-              <div>
-                <div className="label">Parent/Caregiver Training (min)</div>
-                <input
-                  className="input"
-                  type="number"
-                  min="0"
-                  value={parentTraining}
-                  onChange={(e) =>
-                    setParentTraining(Number(e.target.value) || 0)
-                  }
-                />
-              </div>
-              <div>
-                <div className="label">BCBA Supervision (min)</div>
-                <input
-                  className="input"
-                  type="number"
-                  min="0"
-                  value={supervision}
-                  onChange={(e) => setSupervision(Number(e.target.value) || 0)}
-                />
-              </div>
-              <div style={{ gridColumn: "1 / -1" }}>
-                <div className="label">Additional Note</div>
-                <textarea
-                  className="input"
-                  rows={3}
-                  value={noteFree}
-                  onChange={(e) => setNoteFree(e.target.value)}
-                  placeholder="free text note..."
-                />
-              </div>
+            <div className="kicker">Weekday Compliance (Template Windows)</div>
+            <div className="inline-help">
+              Checks for 08:00–09:00 inbound transport (non-billable),
+              09:00–15:00 program (billable), and 15:00–16:00 outbound transport
+              (non-billable). This is a planning aid only; confirm
+              service/billing specifics in your contract and payer manuals.
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+                marginTop: 8,
+              }}
+            >
+              {compliance.daily.map((d) => (
+                <div
+                  key={d.day}
+                  className="tag"
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <span>
+                    <strong>{d.day}</strong> — {d.detail}
+                  </span>
+                  <span
+                    className={`status-badge ${
+                      d.status === "ok"
+                        ? "ok"
+                        : d.status === "warn"
+                        ? "due"
+                        : "expired"
+                    }`}
+                  >
+                    {d.status.toUpperCase()}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 8 }}>
+              <span className="pill">OK: {compliance.counts.ok}</span>{" "}
+              <span className="pill">Warn: {compliance.counts.warn}</span>{" "}
+              <span className="pill">Missing: {compliance.counts.missing}</span>
             </div>
           </div>
 
@@ -487,10 +589,10 @@ export default function ABASchedule() {
           </div>
         </section>
 
-        {/* Preview for PDF */}
+        {/* PDF Preview */}
         <section className="card">
           <div className="kicker">Preview</div>
-          <div className="h1">ABA Weekly Schedule + Note</div>
+          <div className="h1">Weekly Schedule + Note</div>
 
           <div className="preview-surface" id="aba-schedule-preview">
             <header
@@ -539,6 +641,7 @@ export default function ABASchedule() {
                   <th>Day</th>
                   <th>Service</th>
                   <th>Ratio</th>
+                  <th>Billable</th>
                   <th>Location</th>
                   <th>Staff</th>
                   <th>Start</th>
@@ -551,7 +654,7 @@ export default function ABASchedule() {
                 {rows.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={9}
+                      colSpan={10}
                       style={{
                         textAlign: "center",
                         padding: 12,
@@ -567,6 +670,7 @@ export default function ABASchedule() {
                       <td>{r.day}</td>
                       <td>{r.service}</td>
                       <td>{r.ratio}</td>
+                      <td>{r.billable ? "Yes" : "No"}</td>
                       <td>{r.location}</td>
                       <td>{r.staff}</td>
                       <td>{r.start}</td>
@@ -581,7 +685,7 @@ export default function ABASchedule() {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan={9}>
+                  <td colSpan={10}>
                     <div
                       style={{
                         display: "flex",
@@ -590,7 +694,9 @@ export default function ABASchedule() {
                         alignItems: "center",
                       }}
                     >
-                      <strong>Total Hours: {totals.all.toFixed(2)}</strong>
+                      <strong>
+                        Billable Total: {totals.all.toFixed(2)} hrs
+                      </strong>
                       <span style={{ color: "#566" }}>|</span>
                       <span
                         style={{
