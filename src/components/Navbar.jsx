@@ -49,6 +49,9 @@ export default function Navbar() {
           <NavLink className="nav-link" to="/mar">
             MAP
           </NavLink>
+          <NavLink className="nav-link" to="/aba-schedule">
+            ABA Schedule
+          </NavLink>
         </div>
 
         {/* Desktop search */}
