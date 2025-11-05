@@ -15,6 +15,7 @@ import HomeSafetyAssessment from "./pages/HomeSafetyAssessment.jsx";
 import BillingContracts from "./pages/BillingContracts.jsx";
 import MedicationMAR from "./pages/MedicationMAP.jsx";
 import ABASchedule from "./pages/ABASchedule.jsx";
+import ABCDataCollector from "./pages/ABCDataCollector.jsx";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/billing" element={<BillingContracts />} />
         <Route path="/mar" element={<MedicationMAR />} />
         <Route path="/aba-schedule" element={<ABASchedule />} />
+        <Route path="/abc-data" element={<ABCDataCollector />} />
       </Routes>
       <Footer />
     </>

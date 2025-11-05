@@ -219,6 +219,19 @@ export default function Home() {
             </Link>
           </div>
         </div>
+        <div className="card">
+          <div className="kicker">Behavior</div>
+          <div className="h1">ABC Data Collector</div>
+          <p className="inline-help">
+            Log Antecedent–Behavior–Consequence events with duration and
+            intensity. Export a PDF summary.
+          </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn ok" to="/abc-data">
+              Open ABC Collector
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
