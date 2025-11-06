@@ -21,19 +21,6 @@ https://healthcaretools.netlify.app/
 - **Client-only**: all processing happens in the browser.
 - **No PHI storage**: outputs must be downloaded and stored in approved systems.
 
-### Billing Contracts (DDS & MassHealth)
-
-Client-only billing sheet with regulated DDS CBDS presets (per 15-minute unit) and paste-in MassHealth Day Hab rates. Supports multi-client lines, PDF export, and basic header branding.
-
-Key features:
-
-- Starts with 10 blank rows; buttons to Add 1 or Add 10 rows.
-- DDS CBDS presets (101 CMR 415.00) preloaded with per-15-min unit rates.
-- MassHealth Day Hab: paste your current rates (101 CMR 348.00) as JSON to update for the session.
-- Default Units = 15 for each new line (editable).
-- Columns: Client, Payer, Description, Code, Units, Unit Label, Rate, Line Total, Notes.
-- Logo / Statement header (optional) renders at the top of the PDF.
-
 ## Getting Started
 
 ```bash
@@ -62,11 +49,20 @@ npm run preview
 src/
   components/
     Navbar.jsx
+    FlagButton.jsx
+    Footer.jsx
+    FormFieldEditor.jsx
+    SessionBadge.jsx
+    FormPreview.jsx
     TemplateCard.jsx
   context/
     SessionContext.jsx
   pages/
     Home.jsx
+    ABADataCollector.jsx
+    Flagged.jsx
+    FormBuilder.jsx
+    MedicationMAP.jsx
     Templates.jsx
     FormBuilder.jsx
     TourForm.jsx
@@ -76,6 +72,8 @@ src/
     BillingContracts.jsx
     AdminTools.jsx
     PdfTools.jsx
+    TourForm.jsx
+    Templates.jsx
   util/
     pdf.js         # downloadElementAsPDF helper
   styles.css
@@ -118,39 +116,11 @@ Each page renders a preview container and exports it:
 </button>
 ```
 
-## Styling & Responsiveness
-
-- Mobile-first additions in `styles.css`:
-  - fluid spacing/typography via `clamp()`
-  - responsive grids
-  - **Navbar** collapses to a hamburger → slide-in drawer on small screens
-- New components (badges/progress bars) use additive CSS classes; no theme overrides.
-
-## Adding a New Tool/Page
-
-1. Create a page in `src/pages/YourTool.jsx`.
-2. Register the route in `src/App.jsx`:
-   ```jsx
-   import YourTool from "./pages/YourTool.jsx";
-   <Route path="/your-tool" element={<YourTool />} />;
-   ```
-3. Add a link in `Navbar.jsx` and (optionally) a card in `Templates.jsx`.
-
 ## Data & Privacy
 
 - This project is not an EMR/EHR.
 - Do not store PHI here.
 - All outputs must be downloaded and filed in your organization’s official system.
-
-## Requirements
-
-- Node 18+ (recommended)
-- Modern evergreen browsers
-
-## Notes
-
-- If PDF output looks clipped on small screens, ensure the preview container uses a fixed content width with `max-width: 100%` (already in place on provided pages).
-- Keep assets (logos) small for better PDF performance.
 
 # License & Attribution
 
