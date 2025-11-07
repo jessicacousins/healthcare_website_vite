@@ -16,6 +16,7 @@ import BillingContracts from "./pages/BillingContracts.jsx";
 import MedicationMAR from "./pages/MedicationMAP.jsx";
 import ABASchedule from "./pages/ABASchedule.jsx";
 import ABCDataCollector from "./pages/ABCDataCollector.jsx";
+import CurriculumBuilder from "./pages/CurriculumBuilder.jsx";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/mar" element={<MedicationMAR />} />
         <Route path="/aba-schedule" element={<ABASchedule />} />
         <Route path="/abc-data" element={<ABCDataCollector />} />
+        <Route path="/curriculum-builder" element={<CurriculumBuilder />} />
       </Routes>
       <Footer />
     </>

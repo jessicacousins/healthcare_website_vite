@@ -219,6 +219,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
+        {/* ABA Data Collector page */}
         <div className="card">
           <div className="kicker">Behavior</div>
           <div className="h1">ABC Data Collector</div>
@@ -229,6 +230,19 @@ export default function Home() {
           <div style={{ marginTop: 10 }}>
             <Link className="btn ok" to="/abc-data">
               Open ABC Collector
+            </Link>
+          </div>
+        </div>
+        {/* curriculum page  */}
+        <div className="card">
+          <div className="kicker">Curriculum</div>
+          <div className="h1">Curriculum Builder</div>
+          <p className="inline-help">
+            Template for Curriculum. Export a PDF summary.
+          </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn ok" to="/curriculum-builder">
+              Open Curriculum Builder
             </Link>
           </div>
         </div>
