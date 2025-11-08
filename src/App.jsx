@@ -17,6 +17,7 @@ import MedicationMAR from "./pages/MedicationMAP.jsx";
 import ABASchedule from "./pages/ABASchedule.jsx";
 import ABCDataCollector from "./pages/ABCDataCollector.jsx";
 import CurriculumBuilder from "./pages/CurriculumBuilder.jsx";
+import EmergencyDrillLog from "./pages/EmergencyDrillLog.jsx";
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/aba-schedule" element={<ABASchedule />} />
         <Route path="/abc-data" element={<ABCDataCollector />} />
         <Route path="/curriculum-builder" element={<CurriculumBuilder />} />
+        <Route path="/emergency-drill-log" element={<EmergencyDrillLog />} />
       </Routes>
       <Footer />
     </>

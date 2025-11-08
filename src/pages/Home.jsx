@@ -246,6 +246,20 @@ export default function Home() {
             </Link>
           </div>
         </div>
+        {/* Emergency Drill Log page */}
+        <div className="card">
+          <div className="kicker">Safety</div>
+          <div className="h1">Emergency Drill Log</div>
+          <p className="inline-help">
+            Log emergency drills including date, type, participants, and
+            outcomes. Export a PDF record.
+          </p>
+          <div style={{ marginTop: 10 }}>
+            <Link className="btn ok" to="/emergency-drill-log">
+              Open Emergency Drill Log
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
